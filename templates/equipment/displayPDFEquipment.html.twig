@@ -1,0 +1,50 @@
+{% extends "dashboard/index.html.twig" %}
+
+
+{% block search_bar %}
+	{% include 'employee/searchbar.html.twig' %}
+{% endblock %}
+
+{% block section %}
+
+	<style>
+		.eqp {
+			width: 300px;
+			height: 300px;
+		}
+		#equipmet_holder {
+			display: flex;
+		}
+	</style>
+	<button type="button" class="btn btn-outline-danger" onclick="document.getElementById('delet{{eqp.id}}').click()">
+		<i class="fa-solid fa-print fa-xl" style="color: #9a1d1d;"></i>
+		<a href="{{ path('generatePdf', { 'id':eqp.id}) }}" id="delet{{eqp.id}}" class="d-none"></a>
+	</button>
+
+	<section id="equipmet_holder">
+
+		<img src="{{ asset('images/equipment/' ~ eqp.image) }}" alt="" class="eqp">
+		<div>
+			<h2>numero
+				{{eqp.id}}</h2>
+			<h2>type
+				{{ eqp.type }}</h2>
+			<h2>mark
+				{{ eqp.nom }}</h2>
+			<h2>model
+				{{ eqp.model }}</h2>
+			<h2>ajouter la date
+				{{ eqp.getDateAjoute() ? eqp.getDateAjoute()|date('Y-m-d') : 'N/A' }}</h2>
+		</div>
+
+
+	</section>
+
+
+{% endblock %}
+
+
+{% block jscript %}
+	<script src="{{asset('js/upload_image.js')}}"></script>
+
+{% endblock %}

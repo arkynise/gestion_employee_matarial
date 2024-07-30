@@ -1,0 +1,54 @@
+ 
+ <!doctype html>
+<html lang="en">
+ <head>
+  	<title>Sidebar 01</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<body>
+    
+
+	<style>
+		.eqp {
+			width: 200px;
+			height: 200px;
+		}
+		.equipmet_holder {
+			display: flex;
+		}
+
+		h2{
+			color:green;
+		}
+	</style>
+
+
+	<section id="equipmet_holder" class="equipmet_holder">
+
+		<img src="{{ asset('images/equipment/' ~ eqp.image) }}" class="eqp">
+		<div>
+			<h2>numero
+				{{eqp.id}}</h2>
+			<h2>type
+				{{ eqp.type }}</h2>
+			<h2>mark
+				{{ eqp.nom }}</h2>
+			<h2>model
+				{{ eqp.model }}</h2>
+			<h2>ajouter la date
+				{{ eqp.getDateAjoute() ? eqp.getDateAjoute()|date('Y-m-d') : 'N/A' }}</h2>
+		</div>
+
+
+	</section>
+
+
+</body>
+</html>

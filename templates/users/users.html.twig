@@ -1,0 +1,57 @@
+{% extends 'dashboard/index.html.twig' %}
+
+
+
+
+
+{% block section %}
+
+	<div id="users">
+	{% if count is defined %}
+		<div>
+			
+			<p>le nombre d'employés trouvé est {{count}}</p>
+
+		</div>
+	{% endif %}
+
+		<table class="table table-striped table-dark">
+			<thead>
+				<tr>
+					<th scope="col">#</th>
+					<th scope="col">email</th>
+					<th scope="col">date de creetion</th>
+					<th scope="col"></th>
+				</tr>
+			</thead>
+		</table>
+		<div class="scrollable_Y" style="height:350px;">
+			<table class="table table-striped">
+				<tbody>
+					
+						<tr>
+							<th scope="row"></th>
+							<td></td>
+							<td></td>
+							<td>
+								<button type="button" class="btn btn-outline-danger" >
+									<i class="fa-regular fa-trash-can fa-xl"></i>
+									<a href="" id="" class="d-none"></a>
+								</button>
+
+								<button type="button" class="btn btn-outline-success" >
+									<i class="fa-solid fa-pen fa-xl" style="color: #63E6BE;"></i>
+									<a href="" id="" class="d-none"></a>
+								</button>
+
+							</td>
+						</tr>
+					
+				</tbody>
+
+			</table>
+		</div>
+
+	</div>
+
+{% endblock %}

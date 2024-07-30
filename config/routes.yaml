@@ -3,3 +3,99 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+
+
+startingPoint:
+    path: /
+    controller: App\Controller\UsersController::index
+
+display_users_list:
+    path: /users
+    controller: App\Controller\UsersController::index
+user_add_form:
+    path: /users/add
+    controller: App\Controller\UsersController::userForm
+save_user:
+    path: /users/save
+    controller: App\Controller\UsersController::saveUser
+
+
+
+
+#employees routes
+employee:
+    path: /employee
+    controller: App\Controller\EmployeeController::employee
+
+AjouteEmploiyee:
+    path: /employee/ajoute
+    controller: App\Controller\EmployeeController::index
+
+SupremEmploiyee:
+    path: /employee/delete/{id}
+    controller: App\Controller\EmployeeController::deleteEntity  
+    requirements:
+        id: \d+
+
+SauvgarderEmployee:
+    path: /employee/sauvegarder
+    controller: App\Controller\EmployeeController::save
+UpdateEmployee:
+    path: /employee/update/{id}
+    controller: App\Controller\EmployeeController::display_update
+saveUpdateEmployee:
+    path: /employee/update/save/{id}
+    controller: App\Controller\EmployeeController::save_update
+EmployeeSearch:
+    path: /employee/search
+    controller: App\Controller\EmployeeController::search
+
+
+
+equipment:
+    path: /equipment
+    controller: App\Controller\EquipmentController::equipment
+AjouteEquipment:
+    path: /equipment/ajoute
+    controller: App\Controller\EquipmentController::AddEquipment
+
+SupremEquipment:
+    path: /equipment/delete/{id}
+    controller: App\Controller\EquipmentController::deleteEntity  
+    requirements:
+        id: \d+ 
+
+SauvgarderEquipment:
+    path: /equipment/ajoute/sauvegarder
+    controller: App\Controller\EquipmentController::saveEquipment
+
+UpdateEquipment:
+    path: /equipment/update/{id}
+    controller: App\Controller\EquipmentController::updateEquipment
+
+saveUpdateEquipment:
+    path: /equipment/saveupdate/{id}
+    controller: App\Controller\EquipmentController::saveUpdateEquipment
+
+EquipmentSearch:
+    path: /equipment/search
+    controller: App\Controller\EquipmentController::search
+
+typeEquipent:
+    path: /dashboard/TypeEquipment
+    controller: App\Controller\DashboardController::TypeEquipment
+
+ajouteTypeEquipent:
+    path: /equipment/ajouteTypeEquipment
+    controller: App\Controller\DashboardController::ajouteTypeEquipment   
+SauvgarderTypeEquipment:
+    path: /equipment/sauvgardeTypeEquipment
+    controller: App\Controller\EquipmentController::sauvgardeTypeEquipment   
+printEauipment:
+    path: /equipment/printDisplayEquipment/{id}
+    controller: App\Controller\EquipmentController::printDisplayEquipment 
+
+generatePdf:
+    path: /generatePdf/{id}
+    controller: App\Controller\EquipmentController::generatePdf 
