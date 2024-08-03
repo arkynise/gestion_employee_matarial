@@ -1,0 +1,14 @@
+# config/packages/nucleos_dompdf.yaml
+nucleos_dompdf:
+    defaults:
+        # Default options for DomPDF
+        default_font: Arial
+        font_height_multiplier: 1.1
+        enable_html5_parser: true
+        enable_css_float: true
+        enable_javascript: false
+        enable_php: false
+        enable_remote: true
+        enable_font_subsetting: true
+        enable_font_cache: true
+        enable_images: true

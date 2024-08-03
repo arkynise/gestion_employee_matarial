@@ -6,6 +6,11 @@ framework:
     # Note that the session will be started ONLY if you read or write from it.
     session: true
 
+    cache:
+        app: cache.adapter.filesystem
+        system: cache.adapter.filesystem
+
+
     #esi: true
     #fragments: true
 

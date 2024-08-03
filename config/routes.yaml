@@ -19,7 +19,9 @@ user_add_form:
 save_user:
     path: /users/save
     controller: App\Controller\UsersController::saveUser
-
+UsersSearch:
+    path: /user/search
+    controller: App\Controller\UsersController::search
 
 
 
@@ -96,6 +98,24 @@ printEauipment:
     path: /equipment/printDisplayEquipment/{id}
     controller: App\Controller\EquipmentController::printDisplayEquipment 
 
-generatePdf:
-    path: /generatePdf/{id}
-    controller: App\Controller\EquipmentController::generatePdf 
+generatePdfEquipment:
+    path: /pdfgenerater/equipment/{id}
+    controller: App\Controller\PdfgeneraterController::index 
+
+
+
+
+
+
+resteForm:
+    path: /reset
+    controller: App\Controller\ResetPasswordController::index 
+sendResetLink:
+    path: /reset/link
+    controller: App\Controller\ResetPasswordController::sendResetLink 
+resetSave:
+    path: /reset/save
+    controller: App\Controller\ResetPasswordController::resetSave 
+    
+resetLink:
+    path: /password/reset/{token}

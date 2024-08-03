@@ -24,7 +24,7 @@ class EmployeeController extends AbstractController
     }
 
 
-    
+
 
 
 
@@ -32,24 +32,32 @@ class EmployeeController extends AbstractController
     public function employee(): Response
     {
         $Emp = $this->entityManager->getRepository(Employee::class)->findBy([], ['date_de_creetion' => 'DESC']);
-        return $this->render('employee/employee.html.twig',[
+        return $this->render('employee/employee.html.twig', [
             'Emps' => $Emp
         ]);
     }
     #[Route('/employee/ajoute', name: 'ajoute_employee')]
     public function index(): Response
     {
+        if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
+            // User has the ROLE_ADMIN role
+            return $this->redirectToRoute('employee');
+        }
         return $this->render('employee/addemployee.html.twig');
     }
 
 
 
     #[Route('/employee/update/{id}', name: 'ajoute_employee')]
-    public function display_update(int $id,EntityManagerInterface $entityManager): Response
+    public function display_update(int $id, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
+            // User has the ROLE_ADMIN role
+            return $this->redirectToRoute('employee');
+        }
         $entity = $entityManager->getRepository(Employee::class)->find($id);
-        return $this->render('employee/updateemployee.html.twig',[
-            'emp'=>$entity
+        return $this->render('employee/updateemployee.html.twig', [
+            'emp' => $entity
         ]);
     }
 
@@ -57,19 +65,23 @@ class EmployeeController extends AbstractController
 
 
     #[Route('/employee/update/save/{id}', name: 'ajoute_employee')]
-    public function save_update(Request $request,int $id,EntityManagerInterface $entityManager): Response
+    public function save_update(Request $request, int $id, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
+            // User has the ROLE_ADMIN role
+            return $this->redirectToRoute('employee');
+        }
         $Emp = $entityManager->getRepository(Employee::class)->find($id);
         $Emp->setName($request->get('nom'));
         $Emp->setLastname($request->get('prenom'));
-        if(!$request->get('ddn')){
-            $Emp->setBirthday( \DateTime::createFromFormat('Y-m-d','0000-00-00'));
-        }else{
-            $Emp->setBirthday( \DateTime::createFromFormat('Y-m-d',$request->get('ddn')));
+        if (!$request->get('ddn')) {
+            $Emp->setBirthday(\DateTime::createFromFormat('Y-m-d', '0000-00-00'));
+        } else {
+            $Emp->setBirthday(\DateTime::createFromFormat('Y-m-d', $request->get('ddn')));
         }
-        
+
         $Emp->setTelephone($request->get('telephone'));
-       
+
         $Emp->setDateDeCreetion(new \DateTime());
         $Emp->setSalaire(floatval($request->get('salaire')));
         $Emp->setEmail($request->get('email'));
@@ -80,20 +92,23 @@ class EmployeeController extends AbstractController
 
 
     #[Route('/employee/sauvegarder', name: 'save_employee')]
-    public function save(Request $request,EntityManagerInterface $entityManager): Response
+    public function save(Request $request, EntityManagerInterface $entityManager): Response
     {
-
+        if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
+            // User has the ROLE_ADMIN role
+            return $this->redirectToRoute('employee');
+        }
         $Emp = new employee();
         $Emp->setName($request->get('nom'));
         $Emp->setLastname($request->get('prenom'));
-        if(!$request->get('ddn')){
-            $Emp->setBirthday( \DateTime::createFromFormat('Y-m-d','0000-00-00'));
-        }else{
-            $Emp->setBirthday( \DateTime::createFromFormat('Y-m-d',$request->get('ddn')));
+        if (!$request->get('ddn')) {
+            $Emp->setBirthday(\DateTime::createFromFormat('Y-m-d', '0000-00-00'));
+        } else {
+            $Emp->setBirthday(\DateTime::createFromFormat('Y-m-d', $request->get('ddn')));
         }
-        
+
         $Emp->setTelephone($request->get('telephone'));
-       
+
         $Emp->setDateDeCreetion(new \DateTime());
         $Emp->setSalaire(floatval($request->get('salaire')));
         $Emp->setEmail($request->get('email'));
@@ -102,12 +117,12 @@ class EmployeeController extends AbstractController
         $entityManager->flush();
         return $this->redirectToRoute('employee');
     }
-    
+
 
 
 
     #[Route('/employee/search', name: 'search_employee')]
-    public function search(Request $request,EntityManagerInterface $entityManager): Response
+    public function search(Request $request, EntityManagerInterface $entityManager): Response
     {
         $query = $entityManager->createQuery(
             'SELECT u FROM App\Entity\Employee u
@@ -116,36 +131,35 @@ class EmployeeController extends AbstractController
               u.telephone LIKE :searchInput '
         );
         $searchInput = $request->get('search_field');
-        $query->setParameter('searchInput', $searchInput.'%');
+        $query->setParameter('searchInput', $searchInput . '%');
         $emp = $query->getResult();
         $length = count($emp);
         return $this->render('employee/employee.html.twig', [
-            'Emps'=>$emp,
-            'count'=>$length
+            'Emps' => $emp,
+            'count' => $length
         ]);
-
     }
 
 
     #[Route('/employee/delete/{id}', name: 'delete_employee')]
-    public function deleteEntity(int $id,EntityManagerInterface $entityManager): Response
+    public function deleteEntity(int $id, EntityManagerInterface $entityManager): Response
     {
-        
+        if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
+            // User has the ROLE_ADMIN role
+            return $this->redirectToRoute('employee');
+        }
         $entity = $entityManager->getRepository(Employee::class)->find($id);
-    
+
         if (!$entity) {
             throw $this->createNotFoundException('Entity not found');
         }
-    
+
         $entityManager->remove($entity);
         $entityManager->flush();
-    
+
         // Optional: Add a flash message for user feedback
         $this->addFlash('success', 'Entity deleted successfully');
-    
+
         return $this->redirectToRoute('employee'); // Redirect to a route after deletion
     }
-
-
 }
-

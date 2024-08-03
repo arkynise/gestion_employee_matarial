@@ -1,4 +1,8 @@
+# config/packages/twig.yaml
 twig:
+    globals:
+        app_path: '%app_path%'
+
     file_name_pattern: '*.twig'
 
 when@test:

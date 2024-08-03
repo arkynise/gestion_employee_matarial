@@ -1,31 +1,46 @@
 {% extends "dashboard/index.html.twig" %}
 
 
-
 {% block section %}
 	<section>
 
-		<form action="{{path('save_user')}}" method="post" enctype="multipart/form-data" class="scrollable_Y p-4" style="height:450px;">
+		<form action="{{path('save_user')}}" method="post" enctype="multipart/form-data" class="scrollable_Y p-4" style="height:70vh;">
 
 			<div data-mdb-input-init class="form-outline mb-4">
 				<label class="form-label" for="typePasswordX-2">type</label>
 				<select name="type" id="equipment_state" class="form-control form-control-lg">
-					<option value="Admin">Admin</option>
-					<option value="subAdmin">subAdmin</option>
+					<option value="ROLE_ADMIN">Admin</option>
+					<option value="ROLE_SUPER_ADMIN">super Admin</option>
 				</select>
 			</div>
 			<div data-mdb-input-init class="form-outline mb-4">
 
-				<label class="form-label fs-5" for="username">username</label>
+				<label class="form-label fs-5" for="username">
+					{% if app.session.flashBag.has('error_username') %}
+						{% for message in app.session.flashBag.get('error_username') %}
+							<p style="color:red;">{{message}}</p>
+						{% endfor %}
+					{% else %}
+						username
+					{% endif %}
+				</label>
 				<input type="text" id="username" name="username" minlength="4" class="form-control form-control-lg" required/>
-				
+
 
 			</div>
 			<div data-mdb-input-init class="form-outline mb-4">
 
-				<label class="form-label fs-5" for="typeEmailX-2">email</label>
+				<label class="form-label fs-5" for="typeEmailX-2">
+					{% if app.session.flashBag.has('error_email') %}
+						{% for message in app.session.flashBag.get('error_email') %}
+							<p style="color:red;">{{message}}</p>
+						{% endfor %}
+					{% else %}
+						email
+					{% endif %}
+				</label>
 				<input type="email" list="emails_list" id="typeEmailX-2" name="email" minlength="4" class="form-control form-control-lg" required/>
-				
+
 
 			</div>
 			<div data-mdb-input-init class="form-outline mb-4">

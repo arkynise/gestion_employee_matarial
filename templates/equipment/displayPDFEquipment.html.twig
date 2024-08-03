@@ -18,7 +18,7 @@
 	</style>
 	<button type="button" class="btn btn-outline-danger" onclick="document.getElementById('delet{{eqp.id}}').click()">
 		<i class="fa-solid fa-print fa-xl" style="color: #9a1d1d;"></i>
-		<a href="{{ path('generatePdf', { 'id':eqp.id}) }}" id="delet{{eqp.id}}" class="d-none"></a>
+		<a href="{{ path('generatePdfEquipment', { 'id':eqp.id}) }}" id="delet{{eqp.id}}" class="d-none"></a>
 	</button>
 
 	<section id="equipmet_holder">

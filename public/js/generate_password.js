@@ -8,12 +8,12 @@ function generatePassword() {
         var randomChar = charset.charAt(Math.floor(Math.random() * charset.length));
         password += randomChar;
     }
-    document.getElementById("password_field").value = password;
+    document.getElementById("password").value = password;
 }
 
 
 document.getElementById('password_visibility').addEventListener('change',function(){
-    const passwordField = document.getElementById('password_field');
+    const passwordField = document.getElementById('password');
     if (this.checked) {
         passwordField.type = 'text';
     } else {

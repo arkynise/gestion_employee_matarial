@@ -2,13 +2,13 @@
 
 
 {% block search_bar %}
-	{% include 'employee/searchbar.html.twig' %}
+	{% include 'equipment/searchbar.html.twig' %}
 {% endblock %}
 
 {% block section %}
 	<section>
 
-		<form action="{{ path('saveUpdateEquipment', { 'id':eqp.id}) }}" method="post" enctype="multipart/form-data" class="scrollable_Y p-4" style="height:450px;">
+		<form action="{{ path('saveUpdateEquipment', { 'id':eqp.id}) }}" method="post" enctype="multipart/form-data" class="scrollable_Y p-4" style="height:70vh;">
 			<div data-mdb-input-init class="form-outline mb-4 d-flex justify-content-center">
 				<div class="project">
 					<div class="hdImg">
