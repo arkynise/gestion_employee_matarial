@@ -22,7 +22,12 @@ save_user:
 UsersSearch:
     path: /user/search
     controller: App\Controller\UsersController::search
-
+updateuser:
+    path: /user/update/{id}
+    controller: App\Controller\UsersController::updateForm
+save_upade_user:
+    path: /users/saveUpdate/{username}
+    controller: App\Controller\UsersController::saveUpdateUser
 
 
 #employees routes

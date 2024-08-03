@@ -32,13 +32,13 @@ class UsersController extends AbstractController
     }
 
 
-    #[Route('/users/add', name: 'app_users')]
+    #[Route('/users/add', name: 'add_users')]
     public function userForm(): Response
     {
         return $this->render('users/addUser.html.twig');
     }
 
-    #[Route('/users/save', name: 'app_users')]
+    #[Route('/users/save', name: 'save_users')]
     public function saveUser(Request $request,EntityManagerInterface $entityManager,UserPasswordHasherInterface $passwordHasher): Response
     {
 
@@ -131,7 +131,7 @@ class UsersController extends AbstractController
 
 
 
-   #[Route('/user/search', name: 'search_employee')]
+   #[Route('/user/search', name: 'search_user')]
     public function search(Request $request, EntityManagerInterface $entityManager): Response
     {
         $query = $entityManager->createQuery(
@@ -149,4 +149,55 @@ class UsersController extends AbstractController
         ]);
     }
 
+
+
+
+
+    #[Route('/user/update/{id}', name: 'update_user')]
+    public function updateForm(UserRepository $userRepository,string $id): Response
+    {
+
+        $user = $userRepository->findOneBy(['username' => $id]);
+        return $this->render('users/updateuser.html.twig', [
+            'user' => $user,
+            
+            
+        ]);
+    }
+
+
+
+
+
+
+    #[Route('/users/saveUpdate/{username}', name: 'saveUpdate_users')]
+    public function saveUpdateUser(string $username,Request $request,UserRepository $userRepository,EntityManagerInterface $entityManager,UserPasswordHasherInterface $passwordHasher): Response
+    {
+
+        $user = $userRepository->findOneBy(['username' => $username]);
+        $email=$request->get('email');
+        
+        $user->setEmail($email);
+
+        $user->setUserName($request->get('username'));
+        
+        $password=$request->get('password');
+        if($password !=""){
+        $user->setPassword($passwordHasher->hashPassword($user,$password));
+        }
+
+        $user->setRoles([$request->get('type')]);
+        
+        
+        try{
+            $entityManager->persist($user);
+        $entityManager->flush();
+        $this->sendEmail($email,$password);
+        return $this->redirectToRoute('display_users_list');
+        }catch (TransportExceptionInterface $e) {
+            return $this->redirectToRoute('user_add_form');
+        }
+        
+        
+    }
 }

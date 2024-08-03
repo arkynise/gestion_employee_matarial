@@ -3,7 +3,7 @@
 
 {% block search_bar %}
 
-{% include 'users/searchbar.html.twig' %}
+	{% include 'users/searchbar.html.twig' %}
 
 {% endblock %}
 
@@ -11,13 +11,14 @@
 {% block section %}
 
 	<div id="users">
-	{% if count is defined %}
-		<div>
-			
-			<p>le nombre d'employés trouvé est {{count}}</p>
+		{% if count is defined %}
+			<div>
 
-		</div>
-	{% endif %}
+				<p>le nombre d'employés trouvé est
+					{{count}}</p>
+
+			</div>
+		{% endif %}
 
 		<table class="table table-striped table-dark">
 			<thead>
@@ -33,27 +34,27 @@
 			<table class="table table-striped">
 				<tbody>
 					{% for user in users %}
-						
-					
+
+
 						<tr>
 							<th scope="row">{{user.username}}</th>
 							<td>{{user.email}}</td>
 							<td>{{ user.lastLogin() ? user.lastLogin()|date('Y-m-d') : 'N/A' }}</td>
 							<td>
-								<button type="button" class="btn btn-outline-danger" >
+								<button type="button" class="btn btn-outline-danger">
 									<i class="fa-regular fa-trash-can fa-xl"></i>
 									<a href="" id="" class="d-none"></a>
 								</button>
-
-								<button type="button" class="btn btn-outline-success" >
-									<i class="fa-solid fa-pen fa-xl" style="color: #63E6BE;"></i>
-									<a href="" id="" class="d-none"></a>
-								</button>
-
+								<form action="{{path('updateuser',{'id':user.username})}}" method="post">
+									<button type="submit" class="btn btn-outline-success">
+										<i class="fa-solid fa-pen fa-xl" style="color: #63E6BE;"></i>
+										<a href="" id="" class="d-none"></a>
+									</button>
+								</form>
 							</td>
 						</tr>
-						{% endfor %}
-					
+					{% endfor %}
+
 				</tbody>
 
 			</table>
