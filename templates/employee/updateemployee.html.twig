@@ -8,7 +8,13 @@
 {% block section %}
 	<section>
 
-		<form action="{{path('saveUpdateEmployee',{ 'id':emp.id}) }}" method="post" class="scrollable_Y" style="height:70vh;">
+		<form action="{{path('saveUpdateEmployee',{ 'id':emp.id}) }}" method="post" enctype="multipart/form-data" class="scrollable_Y" style="height:70vh;">
+			
+			<div class="d-flex justify-content-center">
+				<img src="{{asset('images/employees/profile_photo/default_profile_image.jpg')}}" id="profile_image" alt="image de profile" class="profile_image" title="cliquez pour télécharger une image de profil" onclick="document>getElementById('image_uploader').click()">
+				<input type="file" id="image_uploader" name="image_uploader" accept=".png, .jpg, .jpeg" id="profile_image_loader" class="d-none">
+
+			</div>
 			<div data-mdb-input-init class="form-outline mb-4">
 
 				<label class="form-label fs-5" for="typeEmailX-2">nom</label>
@@ -20,15 +26,15 @@
 				<input type="text" id="typePasswordX-2" name="prenom" class="form-control form-control-lg" minlength="4" value="{{emp.lastname}}" required/>
 
 			</div>
-			
+
 			<div data-mdb-input-init class="form-outline mb-4">
 				<label class="form-label" for="typePasswordX-2">date de naissance</label>
-				<input type="date" id="typePasswordX-2" name="ddn" class="form-control form-control-lg" value="{{emp.birthday|date('Y-m-d') }}"required/>
+				<input type="date" id="typePasswordX-2" name="ddn" class="form-control form-control-lg" value="{{emp.birthday|date('Y-m-d') }}" required/>
 
 			</div>
 			<div data-mdb-input-init class="form-outline mb-4">
 				<label class="form-label" for="typePasswordX-2">telephone</label>
-				<input type="number" id="typePasswordX-2" name="telephone" class="form-control form-control-lg" minlength="10" maxlenght="10" pattern="^(07|06|05)\d{8}$"  value="{{emp.telephone}}"required/>
+				<input type="number" id="typePasswordX-2" name="telephone" class="form-control form-control-lg" minlength="10" maxlenght="10" pattern="^(07|06|05)\d{8}$" value="{{emp.telephone}}" required/>
 
 			</div>
 			<div data-mdb-input-init class="form-outline mb-4">
@@ -41,11 +47,38 @@
 				<input type="number" id="typePasswordX-2" name="salaire" class="form-control form-control-lg" value="{{emp.salaire}}"/>
 
 			</div>
-      <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg btn-block" type="submit">sauvegarder</button>
+			<div data-mdb-input-init class="form-outline mb-4 d-flex justify-content-between">
+				<div class="p-3">
+					<label for="inputGroupFile01" id="label_for_naissance">acte de naissance</label>
+					<div class="input-group mb-3 ">
+						<label class="input-group-text" for="inputGroupFile01">Upload</label>
+						<input type="file" class="form-control d-none" name="naissance" id="inputGroupFile01" accept=".pdf">
+						<input type="text" id="naiccance" value="{{emp.getBirthCerteficat()}}" class="form-control form-control-lg" style="width:30vw" readonly/>
+
+					</div>
+				</div>
+
+				<div class="p-3">
+					<label for="inputGroupFile02" id="label_for_residence">résidence</label>
+					<div class="input-group mb-3">
+						<label class="input-group-text" for="inputGroupFile02">Upload</label>
+						<input type="file" class="form-control d-none" name="residence" id="inputGroupFile02" accept=".pdf">
+						<input type="text" id="résidence" value="{{emp.getResidence()}}" class="form-control form-control-lg" style="width:30vw" readonly/>
+
+					</div>
+				</div>
+
+			</div>
+			<button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg btn-block" type="submit">sauvegarder</button>
 		</form>
 
-		
-				      
+
 	</section>
+
+{% endblock %}
+
+{% block jscript %}
+	<script src="{{asset('js/charger_document.js')}}"></script>
+	<script src="{{asset('js/upload_profile_image.js')}}"></script>
 
 {% endblock %}

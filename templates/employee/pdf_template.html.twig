@@ -1,0 +1,58 @@
+<section>
+	<div>
+		<img src="http://127.0.0.1:8000/images/employees/profile_photo/{{emp.getProfileImage()}}" alt="" style="width: 300px;height:300px;border-radius:50%; position:fixed;top:0;left:297px;">
+	</div>
+	<div style="position: fixed;top:400px;left:230px;text-align:center:">
+		<h1>
+			<strong>Nom</strong>
+		</h1>
+		<h1>
+			<strong>Prenom</strong>
+		</h1>
+		<h1>
+			<strong>Date de naiccanse</strong>
+		</h1>
+		<h1>
+			<strong>telephone</strong>
+		</h1>
+		<h1>
+			<strong>email</strong>
+		</h1>
+		<h1>
+			<strong>salaire</strong>
+		</h1>
+	</div>
+	<div style="position: fixed;top:400px;left:534px;text-align:center:">
+		<h1>
+			<strong>{{emp.name}}</strong>
+		</h1>
+		<h1>
+			<strong>{{emp.lastname}}</strong>
+		</h1>
+		<h1>
+			<strong>{{ emp.getBirthday() ? emp.getBirthday()|date("d/m/Y") : 'N/A' }}</strong>
+		</h1>
+		<h1>
+			<strong>{{emp.telephone}}</strong>
+		</h1>
+		<h1>
+			<strong>
+				{{emp.email}}
+			</strong>
+		</h1>
+		<h1>
+			<strong>
+                {{emp.salaire}}
+            </strong>
+		</h1>
+	</div>
+
+	<div style="position: fixed;top:900px;left:100px;text-align:center:">
+		<h4>
+			<strong>cree le</strong><br>{{ "now"|date("d/m/Y") }}</h4>
+	</div>
+	<div style="position: fixed;top:900px;left:694px;text-align:center:">
+		<h4>
+			<strong>signature</strong>
+		</h4>
+	</div</section>

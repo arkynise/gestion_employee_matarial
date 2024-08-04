@@ -7,7 +7,9 @@ parameters:
     app_path: '%env(APP_PATH)%'
 
 services:
-
+    App\Service\FileUploader:
+        arguments:
+            $targetDirectory: '%kernel.project_dir%/public/uploads'
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.

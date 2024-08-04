@@ -6,21 +6,25 @@ namespace App\Controller;
 
 use App\Entity\Equipment;
 use App\Entity\Employee;
+use Knp\Snappy\Pdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DateTime\DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Service\FileUploader;
 
 class EmployeeController extends AbstractController
 {
 
     private $entityManager;
+    private $fileUploader;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, FileUploader $fileUploader)
     {
         $this->entityManager = $entityManager;
+        $this->fileUploader = $fileUploader;
     }
 
 
@@ -82,9 +86,32 @@ class EmployeeController extends AbstractController
 
         $Emp->setTelephone($request->get('telephone'));
 
-        $Emp->setDateDeCreetion(new \DateTime());
+        
         $Emp->setSalaire(floatval($request->get('salaire')));
         $Emp->setEmail($request->get('email'));
+
+        $dateTime = new \DateTime();
+        $profileImage = $request->files->get('image_uploader');
+       
+        if ($profileImage) {
+            $fileName = "I-" . $dateTime->format('YmdHis') . ".jpg";
+            $this->fileUploader->upload($profileImage, "/images/employees/profile_photo/", $fileName);
+            $Emp->setProfileImage($fileName);
+        }
+        
+        $naissance = $request->files->get('naissance');
+        if ($naissance) {
+            $fileName = "N-" . $dateTime->format('YmdHis') . ".pdf";
+            $this->fileUploader->upload($naissance, "/images/employees/act_de_naissance/", $fileName);
+            $Emp->setBirthCerteficat($fileName);
+        }
+        $residence = $request->files->get('residence');
+        if ($residence) {
+            $fileName = "R-" . $dateTime->format('YmdHis') . ".pdf";
+            $this->fileUploader->upload($residence, "/images/employees/residence/", $fileName);
+            $Emp->setResidence($fileName);
+        }
+
 
         $entityManager->flush();
         return $this->redirectToRoute('employee');
@@ -112,6 +139,28 @@ class EmployeeController extends AbstractController
         $Emp->setDateDeCreetion(new \DateTime());
         $Emp->setSalaire(floatval($request->get('salaire')));
         $Emp->setEmail($request->get('email'));
+
+        $dateTime = new \DateTime();
+        $profileImage = $request->files->get('image_uploader');
+        $fileName="default_profile_image.jpg";
+        if ($profileImage) {
+            $fileName = "I-" . $dateTime->format('YmdHis') . ".jpg";
+            $this->fileUploader->upload($profileImage, "/images/employees/profile_photo/", $fileName);
+            
+        }
+        $Emp->setProfileImage($fileName);
+        $naissance = $request->files->get('naissance');
+        if ($naissance) {
+            $fileName = "N-" . $dateTime->format('YmdHis') . ".pdf";
+            $this->fileUploader->upload($naissance, "/images/employees/act_de_naissance/", $fileName);
+            $Emp->setBirthCerteficat($fileName);
+        }
+        $residence = $request->files->get('residence');
+        if ($naissance) {
+            $fileName = "R-" . $dateTime->format('YmdHis') . ".pdf";
+            $this->fileUploader->upload($residence, "/images/employees/residence/", $fileName);
+            $Emp->setResidence($fileName);
+        }
 
         $entityManager->persist($Emp);
         $entityManager->flush();
@@ -161,5 +210,31 @@ class EmployeeController extends AbstractController
         $this->addFlash('success', 'Entity deleted successfully');
 
         return $this->redirectToRoute('employee'); // Redirect to a route after deletion
+    }
+
+
+    #[Route('/generatePdf/{id}', name: 'print_action')]
+
+    public function generatePdf(Pdf $pdf, int $id): Response
+    {
+        // Render the HTML template and capture the specific section
+        $eemployeetRepository = $this->entityManager->getRepository(Employee::class);
+        $employee = $eemployeetRepository->find($id);
+        $html = $this->renderView('employee/pdf_template.html.twig', [
+            'emp' => $employee
+        ]);
+
+        // Generate PDF from the rendered HTML
+        $pdfContent = $pdf->getOutputFromHtml($html);
+
+        // Return the PDF response
+        return new Response(
+            $pdfContent,
+            200,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="file.pdf"',
+            ]
+        );
     }
 }

@@ -57,6 +57,9 @@ saveUpdateEmployee:
 EmployeeSearch:
     path: /employee/search
     controller: App\Controller\EmployeeController::search
+generatePdfEquipment:
+    path: /generatePdf/{id}
+    controller: App\Controller\EmployeeController::generatePdf 
 
 
 
@@ -103,9 +106,7 @@ printEauipment:
     path: /equipment/printDisplayEquipment/{id}
     controller: App\Controller\EquipmentController::printDisplayEquipment 
 
-generatePdfEquipment:
-    path: /pdfgenerater/equipment/{id}
-    controller: App\Controller\PdfgeneraterController::index 
+
 
 
 

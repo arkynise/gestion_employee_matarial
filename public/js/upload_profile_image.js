@@ -1,5 +1,5 @@
 document.getElementById('image_uploader').addEventListener('change', function(event) {
-    const imagePreview = document.getElementById('image_holder');
+    const imagePreview = document.getElementById('profile_image');
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
@@ -7,9 +7,7 @@ document.getElementById('image_uploader').addEventListener('change', function(ev
             imagePreview.src =  e.target.result ;
         }
         reader.readAsDataURL(file);
-    } else {
-        imagePreview.innerHTML = '<span>No image selected</span>';
-    }
+    } 
    
 });
 

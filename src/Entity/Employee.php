@@ -39,6 +39,15 @@ class Employee
     #[ORM\Column(nullable: true)]
     private ?float $salaire = null;
 
+    #[ORM\Column(length: 40, nullable: true)]
+    private ?string $birth_certeficat = null;
+
+    #[ORM\Column(length: 40, nullable: true)]
+    private ?string $residence = null;
+
+    #[ORM\Column(length: 40, nullable: true)]
+    private ?string $profile_image = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -127,6 +136,42 @@ class Employee
     public function setSalaire(?float $salaire): static
     {
         $this->salaire = $salaire;
+
+        return $this;
+    }
+
+    public function getBirthCerteficat(): ?string
+    {
+        return $this->birth_certeficat;
+    }
+
+    public function setBirthCerteficat(?string $birth_certeficat): static
+    {
+        $this->birth_certeficat = $birth_certeficat;
+
+        return $this;
+    }
+
+    public function getResidence(): ?string
+    {
+        return $this->residence;
+    }
+
+    public function setResidence(?string $residence): static
+    {
+        $this->residence = $residence;
+
+        return $this;
+    }
+
+    public function getProfileImage(): ?string
+    {
+        return $this->profile_image;
+    }
+
+    public function setProfileImage(?string $profile_image): static
+    {
+        $this->profile_image = $profile_image;
 
         return $this;
     }

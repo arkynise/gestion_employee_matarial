@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EquipmentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -34,6 +36,10 @@ class Equipment
 
     #[ORM\Column(length: 20)]
     private ?string $state = 'disponible';
+
+   
+
+ 
 
     public function getId(): ?int
     {
@@ -123,4 +129,6 @@ class Equipment
 
         return $this;
     }
+
+   
 }

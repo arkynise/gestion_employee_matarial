@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Employee;
-use Knp\Snappy\Pdf;
 use App\Entity\Equipment;
 use App\Entity\TypesEquipment;
 use App\Entity\Mantonance;
@@ -96,6 +95,24 @@ class EquipmentController extends AbstractController
         return $this->redirectToRoute('equipment');
     }
 
+    #[Route('/equipment/delete/{id}', name: 'delete_equipment')]
+    public function deleteEntity(int $id,EntityManagerInterface $entityManager): Response
+    {
+        
+        $entity = $entityManager->getRepository(Equipment::class)->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Entity not found');
+        }
+
+        $entityManager->remove($entity);
+        $entityManager->flush();
+
+        // Optional: Add a flash message for user feedback
+        $this->addFlash('success', 'Entity deleted successfully');
+
+        return $this->redirectToRoute('equipment'); // Redirect to a route after deletion
+    }
 
 
 
@@ -124,21 +141,6 @@ class EquipmentController extends AbstractController
 
 
 
-
-
-
-    #[Route('/equipment/printDisplayEquipment/{id}', name: 'print_equipment')]
-    public function printDisplayEquipment(int $id, EntityManagerInterface $entityManager): Response
-    {
-        $equipmentRepository = $this->entityManager->getRepository(Equipment::class);
-        $equipment = $equipmentRepository->find($id);
-
-
-        return $this->render('equipment/displayPDFEquipment.html.twig', [
-            'eqp' => $equipment,
-
-        ]);
-    }
 
 
 
@@ -215,28 +217,5 @@ class EquipmentController extends AbstractController
 
 
 
-    #[Route('/generatePdf/{id}', name: 'print_action')]
-
-    public function generatePdf(Pdf $pdf, int $id): Response
-    {
-        // Render the HTML template and capture the specific section
-        $equipmentRepository = $this->entityManager->getRepository(Equipment::class);
-        $equipment = $equipmentRepository->find($id);
-        $html = $this->renderView('equipment/finalformat.html.twig', [
-            'eqp' => $equipment
-        ]);
-
-        // Generate PDF from the rendered HTML
-        $pdfContent = $pdf->getOutputFromHtml($html);
-
-        // Return the PDF response
-        return new Response(
-            $pdfContent,
-            200,
-            [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'inline; filename="file.pdf"',
-            ]
-        );
-    }
+    
 }
