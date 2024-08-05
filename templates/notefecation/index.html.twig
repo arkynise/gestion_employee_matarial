@@ -1,0 +1,41 @@
+{% extends 'dashboard/index.html.twig' %}
+
+
+
+
+
+{% block section %}
+
+	<div id="equipment">
+		
+	
+		
+		<div  class="scrollable_Y" style="height:70vh;">
+			<table class="table table-striped">
+				<tbody>
+                {% for ntf in ntfs %}
+					<tr title="disponibe">
+						
+						{% if is_granted('ROLE_SUPER_ADMIN') %}
+						<td class="text-center" style="width:10vw;">{{ntf.who}} </td>
+                        {% endif %}
+						<td class="text-center" style="width:10vw;">{{ntf.getDidWhat()}}</td>
+                        <td class="text-center" style="width:10vw;">{{ntf.getInTable()}}</td>
+						<td class="text-center" style="width:10vw;">{{ntf.getInLine()}}</td>
+						<td class="text-center" style="width:10vw;">{{ ntf.getDateNotefecation() ? ntf.getDateNotefecation()|date('Y-m-d') : 'N/A' }}</td>
+                        <td class="text-center" style="width:10vw;">{{ ntf.getDateNotefecation() ? ntf.getDateNotefecation()|date('H:m:i') : 'N/A' }}</td>
+					</tr>
+                {% endfor %}
+					
+				</tbody>
+
+			</table>
+		</div>
+
+	</div>
+
+{% endblock %}
+
+
+
+	

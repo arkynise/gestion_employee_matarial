@@ -14,17 +14,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DateTime\DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\FileUploader;
+use App\Service\NotefecationService;
 
 class EmployeeController extends AbstractController
 {
 
     private $entityManager;
     private $fileUploader;
+    private $notefy;
+    
 
-    public function __construct(EntityManagerInterface $entityManager, FileUploader $fileUploader)
+    public function __construct(EntityManagerInterface $entityManager, FileUploader $fileUploader,NotefecationService $notefy)
     {
         $this->entityManager = $entityManager;
         $this->fileUploader = $fileUploader;
+        $this->notefy=$notefy;
     }
 
 
@@ -114,6 +118,10 @@ class EmployeeController extends AbstractController
 
 
         $entityManager->flush();
+
+        $user=$this->getUser();
+        $in_line=' '.$request->get('nom').' '.$request->get('prenom');
+        $this->notefy->notefy($user->getUserIdentifier(),'employee',$in_line,'update');
         return $this->redirectToRoute('employee');
     }
 
@@ -156,7 +164,7 @@ class EmployeeController extends AbstractController
             $Emp->setBirthCerteficat($fileName);
         }
         $residence = $request->files->get('residence');
-        if ($naissance) {
+        if ($residence) {
             $fileName = "R-" . $dateTime->format('YmdHis') . ".pdf";
             $this->fileUploader->upload($residence, "/images/employees/residence/", $fileName);
             $Emp->setResidence($fileName);
@@ -164,6 +172,10 @@ class EmployeeController extends AbstractController
 
         $entityManager->persist($Emp);
         $entityManager->flush();
+
+        $user=$this->getUser();
+        $in_line=' '.$request->get('nom').' '.$request->get('prenom');
+        $this->notefy->notefy($user->getUserIdentifier(),'employee',$in_line,'insert');
         return $this->redirectToRoute('employee');
     }
 
@@ -205,6 +217,9 @@ class EmployeeController extends AbstractController
 
         $entityManager->remove($entity);
         $entityManager->flush();
+        $user=$this->getUser();
+        $in_line=' '.$entity->getName().' '.$entity->getLastname();
+        $this->notefy->notefy($user->getUserIdentifier(),'employee',$in_line,'delete');
 
         // Optional: Add a flash message for user feedback
         $this->addFlash('success', 'Entity deleted successfully');

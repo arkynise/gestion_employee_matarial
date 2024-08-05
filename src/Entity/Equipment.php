@@ -37,6 +37,31 @@ class Equipment
     #[ORM\Column(length: 20)]
     private ?string $state = 'disponible';
 
+    /**
+     * @var Collection<int, Reparation>
+     */
+    #[ORM\OneToMany(targetEntity: Reparation::class, mappedBy: 'numeroEqp')]
+    private Collection $reparations;
+
+    /**
+     * @var Collection<int, Utilisation>
+     */
+    #[ORM\OneToMany(targetEntity: Utilisation::class, mappedBy: 'numeroEqp')]
+    private Collection $utilisations;
+
+    /**
+     * @var Collection<int, Modefication>
+     */
+    #[ORM\OneToMany(targetEntity: Modefication::class, mappedBy: 'numeroEqp')]
+    private Collection $modefications;
+
+    public function __construct()
+    {
+        $this->reparations = new ArrayCollection();
+        $this->utilisations = new ArrayCollection();
+        $this->modefications = new ArrayCollection();
+    }
+
    
 
  
@@ -126,6 +151,96 @@ class Equipment
     public function setState(string $state): static
     {
         $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reparation>
+     */
+    public function getReparations(): Collection
+    {
+        return $this->reparations;
+    }
+
+    public function addReparation(Reparation $reparation): static
+    {
+        if (!$this->reparations->contains($reparation)) {
+            $this->reparations->add($reparation);
+            $reparation->setNumeroEqp($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReparation(Reparation $reparation): static
+    {
+        if ($this->reparations->removeElement($reparation)) {
+            // set the owning side to null (unless already changed)
+            if ($reparation->getNumeroEqp() === $this) {
+                $reparation->setNumeroEqp(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Utilisation>
+     */
+    public function getUtilisations(): Collection
+    {
+        return $this->utilisations;
+    }
+
+    public function addUtilisation(Utilisation $utilisation): static
+    {
+        if (!$this->utilisations->contains($utilisation)) {
+            $this->utilisations->add($utilisation);
+            $utilisation->setNumeroEqp($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUtilisation(Utilisation $utilisation): static
+    {
+        if ($this->utilisations->removeElement($utilisation)) {
+            // set the owning side to null (unless already changed)
+            if ($utilisation->getNumeroEqp() === $this) {
+                $utilisation->setNumeroEqp(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Modefication>
+     */
+    public function getModefications(): Collection
+    {
+        return $this->modefications;
+    }
+
+    public function addModefication(Modefication $modefication): static
+    {
+        if (!$this->modefications->contains($modefication)) {
+            $this->modefications->add($modefication);
+            $modefication->setNumeroEqp($this);
+        }
+
+        return $this;
+    }
+
+    public function removeModefication(Modefication $modefication): static
+    {
+        if ($this->modefications->removeElement($modefication)) {
+            // set the owning side to null (unless already changed)
+            if ($modefication->getNumeroEqp() === $this) {
+                $modefication->setNumeroEqp(null);
+            }
+        }
 
         return $this;
     }

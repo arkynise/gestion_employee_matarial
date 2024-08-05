@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EmployeeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -47,6 +49,17 @@ class Employee
 
     #[ORM\Column(length: 40, nullable: true)]
     private ?string $profile_image = null;
+
+    /**
+     * @var Collection<int, Utilisation>
+     */
+    #[ORM\OneToMany(targetEntity: Utilisation::class, mappedBy: 'idEmp')]
+    private Collection $utilisations;
+
+    public function __construct()
+    {
+        $this->utilisations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -172,6 +185,36 @@ class Employee
     public function setProfileImage(?string $profile_image): static
     {
         $this->profile_image = $profile_image;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Utilisation>
+     */
+    public function getUtilisations(): Collection
+    {
+        return $this->utilisations;
+    }
+
+    public function addUtilisation(Utilisation $utilisation): static
+    {
+        if (!$this->utilisations->contains($utilisation)) {
+            $this->utilisations->add($utilisation);
+            $utilisation->setIdEmp($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUtilisation(Utilisation $utilisation): static
+    {
+        if ($this->utilisations->removeElement($utilisation)) {
+            // set the owning side to null (unless already changed)
+            if ($utilisation->getIdEmp() === $this) {
+                $utilisation->setIdEmp(null);
+            }
+        }
 
         return $this;
     }

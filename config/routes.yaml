@@ -125,3 +125,7 @@ resetSave:
     
 resetLink:
     path: /password/reset/{token}
+
+notefecation:
+    path: /notefecation/{count}
+    controller: App\Controller\NotefecationController::index
