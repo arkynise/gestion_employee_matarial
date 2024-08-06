@@ -1,0 +1,50 @@
+{% extends 'dashboard/index.html.twig' %}
+
+
+{% block search_bar %}
+
+	{% include 'equipment/searchbar.html.twig' %}
+
+{% endblock %}
+
+{% block section %}
+
+	<div id="equipment">
+
+
+		<div class="scrollable_Y" style="height:70vh;">
+			<table class="table table-striped">
+				<tbody>
+
+					{% for data in newData %}
+						<tr title="disponibe">
+
+
+							<td class="text-center p-4">
+								{% if 'réparation' in data %}
+									<i class="fa-solid fa-screwdriver-wrench fa-xl" style="color: #000000;"></i>
+
+								{% else %}
+									<i class="fa-solid fa-chalkboard-user fa-xl" style="color: #000000;"></i>
+
+								{% endif %}
+							</td>
+							<td class="text-center p-4" style=" word-spacing: 5px;  ">
+								<h5>
+									<strong>{{data}}</strong>
+								</h5>
+							</td>
+
+
+						</tr>
+
+					{% endfor %}
+
+				</tbody>
+
+			</table>
+		</div>
+
+	</div>
+
+{% endblock %}

@@ -16,6 +16,17 @@ class UtilisationRepository extends ServiceEntityRepository
         parent::__construct($registry, Utilisation::class);
     }
 
+
+    public function findMaxIdByNumereqp($numeroqp)
+    {
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.numeroEqp = :numeroqp')
+            ->setParameter('numeroqp', $numeroqp)
+            ->orderBy('m.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 //    /**
 //     * @return Utilisation[] Returns an array of Utilisation objects
 //     */

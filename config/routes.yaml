@@ -129,3 +129,8 @@ resetLink:
 notefecation:
     path: /notefecation/{count}
     controller: App\Controller\NotefecationController::index
+
+
+goTohistorique:
+    path: /historic/equipmane/{id}
+    controller: App\Controller\HistoricController::index

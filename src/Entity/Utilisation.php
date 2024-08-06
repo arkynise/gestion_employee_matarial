@@ -22,8 +22,11 @@ class Utilisation
     #[ORM\JoinColumn(nullable: false)]
     private ?Employee $idEmp = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_utilisation = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $date_retourne = null;
 
     public function getId(): ?int
     {
@@ -62,6 +65,18 @@ class Utilisation
     public function setDateUtilisation(\DateTimeInterface $date_utilisation): static
     {
         $this->date_utilisation = $date_utilisation;
+
+        return $this;
+    }
+
+    public function getDateRetourne(): ?\DateTimeInterface
+    {
+        return $this->date_retourne;
+    }
+
+    public function setDateRetourne(?\DateTimeInterface $date_retourne): static
+    {
+        $this->date_retourne = $date_retourne;
 
         return $this;
     }

@@ -43,7 +43,7 @@ class NotefecationController extends AbstractController
             ->orderBy('n.date_notefecation', 'DESC') // Value to exclude
             ->getQuery();
         $notifications = $queryBuilder->getResult();
-        $notifications = array_reverse($notifications);
+        
         return $this->render('notefecation/index.html.twig',[
             'ntfs'=>$notifications,
         ]);

@@ -1,28 +1,28 @@
 {% extends 'dashboard/index.html.twig' %}
 
 
-
 {% block search_bar %}
 
-{% include 'equipment/searchbar.html.twig' %}
+	{% include 'equipment/searchbar.html.twig' %}
 
 {% endblock %}
 
 {% block section %}
 
 	<div id="equipment">
-		
-	{% if count is defined %}
-		<div>
-			
-			<p>le nombre des materials trouvé est {{count}}</p>
 
-		</div>
-	{% endif %}
+		{% if count is defined %}
+			<div>
+
+				<p>le nombre des materials trouvé est
+					{{count}}</p>
+
+			</div>
+		{% endif %}
 		<table class="table table-striped table-dark">
 			<thead>
 				<tr>
-					
+
 					<th scope="col" class="text-center" style="width:10vw;">image</th>
 					<th scope="col" class="text-center" style="width:10vw;">type</th>
 					<th scope="col" class="text-center" style="width:10vw;">mark</th>
@@ -32,34 +32,38 @@
 				</tr>
 			</thead>
 		</table>
-		<div  class="scrollable_Y" style="height:350px;">
+		<div class="scrollable_Y" style="height:70vh;">
 			<table class="table table-striped">
 				<tbody>
-                {% for Eqp in Equipments %}
-					<tr title="disponibe">
-						
-						<td class="text-center" style="width:10vw;">
-							<img src="{{ asset('images/equipment/' ~ Eqp.image) }}" alt="" class="equipment_image" >
-						</td>
-						<td class="text-center" style="width:10vw;">{{ Eqp.type }}</td>
-						<td class="text-center" style="width:10vw;">{{ Eqp.nom }}</td>
-						<td class="text-center" style="width:10vw;">{{ Eqp.model }}</td>
-						<td class="text-center" style="width:10vw;">{{ Eqp.getDateAjoute() ? Eqp.getDateAjoute()|date('Y-m-d') : 'N/A' }}</td>
-						<td class="text-center" style="width:10vw;">
-							<button type="button" class="btn btn-outline-danger"  onclick="document.getElementById('delet{{Eqp.id}}').click()">
-								<i class="fas fa-trash fa-xl" style="color: #ff5233;"></i>
-                                <a href="{{ path('SupremEquipment', { 'id':Eqp.id}) }}" id="delet{{Eqp.id}}" class="d-none"></a>
-							</button>
-							<button type="button" class="btn btn-outline-success" onclick="document.getElementById('update{{Eqp.id}}').click()">
-								<i class="fa-solid fa-pen fa-xl" style="color: #63E6BE;"></i>
-								<a href="{{ path('UpdateEquipment', { 'id':Eqp.id}) }}" id="update{{Eqp.id}}" class="d-none"></a>
-                            </button>
-                            
+					{% for Eqp in Equipments %}
+						<tr title="disponibe">
 
-						</td>
-					</tr>
-                {% endfor %}
-					
+							<td class="text-center" style="width:10vw;">
+								<img src="{{ asset('images/equipment/' ~ Eqp.image) }}" alt="" class="equipment_image">
+							</td>
+							<td class="text-center" style="width:10vw;">{{ Eqp.type }}</td>
+							<td class="text-center" style="width:10vw;">{{ Eqp.nom }}</td>
+							<td class="text-center" style="width:10vw;">{{ Eqp.model }}</td>
+							<td class="text-center" style="width:10vw;">{{ Eqp.getDateAjoute() ? Eqp.getDateAjoute()|date('Y-m-d') : 'N/A' }}</td>
+							<td class="text-center" style="width:10vw;">
+								<button type="button" class="btn btn-outline-primary" onclick="document.getElementById('H{{Eqp.id}}').click()" title="historique">
+									<i class="fas fa-timeline fa-xl" style="color: #12449b;" ></i>
+									<a href="{{ path('goTohistorique', { 'id':Eqp.id}) }}" id="H{{Eqp.id}}" class="d-none"></a>
+								</button>
+								<button type="button" class="btn btn-outline-danger" onclick="document.getElementById('delet{{Eqp.id}}').click()" title="supremer">
+									<i class="fas fa-trash fa-xl" style="color: #ff5233;"></i>
+									<a href="{{ path('SupremEquipment', { 'id':Eqp.id}) }}" id="delet{{Eqp.id}}" class="d-none"></a>
+								</button>
+								<button type="button" class="btn btn-outline-success" onclick="document.getElementById('update{{Eqp.id}}').click()" title="modefie">
+									<i class="fa-solid fa-pen fa-xl" style="color: #63E6BE;"></i>
+									<a href="{{ path('UpdateEquipment', { 'id':Eqp.id}) }}" id="update{{Eqp.id}}" class="d-none"></a>
+								</button>
+
+
+							</td>
+						</tr>
+					{% endfor %}
+
 				</tbody>
 
 			</table>
@@ -68,7 +72,3 @@
 	</div>
 
 {% endblock %}
-
-
-
-	

@@ -1,21 +1,21 @@
 <nav id="sidebar">
 	<div class="p-4 pt-5">
 		<img src="{{asset('images/logo/Booki.png')}}" class="mb-5">
-
-		<ul class="list-unstyled components mb-5">
+		<button id="menu_holder" class="d-none"></button>
+		<ul class="list-unstyled components mb-5" >
 			<li>
 				<a href="/dashboard">Home</a>
 			</li>
 			<li id="notefecation_button">
 				
-					
 					{% if app.user.countNTF is not null and app.user.countNTF > 0 %}
 						
-							<a href="{{path('notefecation', { 'count':app.user.countNTF})}}"><strong style="color:red;"> {{ app.user.countNTF }} Nontefecation</strong></a> 
+							<a href="{{path('notefecation', { 'count':app.user.countNTF})}}"><strong style="color:red;" id="notefecation_title">{{ app.user.countNTF }} Nontefecation</strong></a> 
 								
 					{% else %}
-						<a href="{{path('notefecation', { 'count':app.user.countNTF})}}">Nontefecation</a>
+						<a href="{{path('notefecation', { 'count':app.user.countNTF})}}" id="notefecation_title">Nontefecation</a>
 					{% endif %}
+					
 				
 			</li>
 			<li>

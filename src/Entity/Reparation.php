@@ -18,10 +18,10 @@ class Reparation
     #[ORM\JoinColumn(nullable: false)]
     private ?Equipment $numeroEqp = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_entre = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_sortie = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

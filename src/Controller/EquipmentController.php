@@ -4,24 +4,33 @@ namespace App\Controller;
 
 use App\Entity\Employee;
 use App\Entity\Equipment;
-use App\Entity\TypesEquipment;
-use App\Entity\Mantonance;
+use App\Repository\ReparationRepository;
+use App\Repository\UtilisationRepository;
+use App\Entity\Reparation;
+use App\Entity\Utilisation;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-
+use App\Service\NotefecationService;
 
 class EquipmentController extends AbstractController
 {
 
     private $entityManager;
+    private $notefy;
+    private $maintenanceRepository;
+    private $UtilisationRepository;
 
-    public function __construct(EntityManagerInterface $entityManager)
+
+    public function __construct(EntityManagerInterface $entityManager, NotefecationService $notefy, ReparationRepository $maintenanceRepository,UtilisationRepository $UtilisationRepository)
     {
         $this->entityManager = $entityManager;
+        $this->notefy = $notefy;
+        $this->maintenanceRepository = $maintenanceRepository;
+        $this->UtilisationRepository=$UtilisationRepository;
     }
 
     #[Route('/equipment', name: 'app_dashboard_equipment')]
@@ -91,14 +100,16 @@ class EquipmentController extends AbstractController
         $entityManager->persist($Eqp);
         $entityManager->flush();
 
-
+        $user = $this->getUser();
+        $in_line = ' ' . $request->get('mark') . ' ' . $request->get('model');
+        $this->notefy->notefy($user->getUserIdentifier(), 'material', $in_line, 'insert');
         return $this->redirectToRoute('equipment');
     }
 
     #[Route('/equipment/delete/{id}', name: 'delete_equipment')]
-    public function deleteEntity(int $id,EntityManagerInterface $entityManager): Response
+    public function deleteEntity(int $id, EntityManagerInterface $entityManager): Response
     {
-        
+
         $entity = $entityManager->getRepository(Equipment::class)->find($id);
 
         if (!$entity) {
@@ -107,7 +118,9 @@ class EquipmentController extends AbstractController
 
         $entityManager->remove($entity);
         $entityManager->flush();
-
+        $user = $this->getUser();
+        $in_line = ' ' . $entity->getNom() . ' ' . $entity->getModel();
+        $this->notefy->notefy($user->getUserIdentifier(), 'material', $in_line, 'delete');
         // Optional: Add a flash message for user feedback
         $this->addFlash('success', 'Entity deleted successfully');
 
@@ -150,7 +163,7 @@ class EquipmentController extends AbstractController
     #[Route('/equipment/update/{id}', name: 'update_equipment')]
     public function updateEquipment(int $id, EntityManagerInterface $entityManager): Response
     {
-        if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
+        if (!$this->isGranted('ROLE_SUPER_ADMIN') && !$this->isGranted('ROLE_ADMIN')) {
             // User has the ROLE_ADMIN role
             return $this->redirectToRoute('equipment');
         }
@@ -171,7 +184,7 @@ class EquipmentController extends AbstractController
     {
 
 
-        if (!($this->isGranted('ROLE_SUPER_ADMIN') || $this->isGranted('ROLE_SUPER_ADMIN'))) {
+        if (!($this->isGranted('ROLE_SUPER_ADMIN') && !$this->isGranted('ROLE_ADMIN'))) {
             // User has the ROLE_ADMIN role
             return $this->redirectToRoute('equipment');
         }
@@ -180,6 +193,7 @@ class EquipmentController extends AbstractController
         $Eqp->setModel($request->get('model'));
         $Eqp->setDescription($request->get('description'));
         $Eqp->setType($request->get('type'));
+        $Originam_state = $Eqp->getState();
         $Eqp->setState($request->get('state'));
         $imageFile = $request->files->get('image');
 
@@ -199,23 +213,94 @@ class EquipmentController extends AbstractController
             $Eqp->setImage($request->get('original_image'));
         }
 
+
+        if ($request->get('state') == 'utiliser') {
+            $user = $entityManager->getRepository(Employee::class)->find($request->get('user'));
+            if ($Originam_state == 'disponible') {
+
+
+                $this->save_utilisation($Eqp, $user, $entityManager);
+            }
+            if ($Originam_state == 'mantonance') {
+                $this->update_mantonance($id);
+                $this->save_utilisation($Eqp, $user, $entityManager);
+            }
+        }
+        if ($request->get('state') == 'mantonance') {
+
+            if ($Originam_state == 'disponible') {
+            $this->save_mantonance($Eqp, $request->get('mnt_desc'), $entityManager);
+            }
+            if ($Originam_state == 'utiliser') {
+                $this->update_utilisation($id);
+                $this->save_mantonance($Eqp, $request->get('mnt_desc'), $entityManager);
+            }
+        }
+        if ($request->get('state') == 'disponible' && $Originam_state == 'mantonance') {
+
+
+            $this->update_mantonance($id);
+        }
+        if ($request->get('state') == 'disponible' && $Originam_state == 'utiliser') {
+
+
+            $this->update_utilisation($id);
+        }
+
         $entityManager->flush();
 
+
+        $user = $this->getUser();
+        $in_line = ' ' . $request->get('mark') . ' ' . $request->get('model');
+        $this->notefy->notefy($user->getUserIdentifier(), 'material', $in_line, 'update');
+        return $this->redirectToRoute('equipment');
         return $this->redirectToRoute('equipment');
     }
 
 
 
+    public function save_utilisation(Equipment $eqp, Employee $user, EntityManagerInterface $entityManager): void
+    {
+        $utiliser = new Utilisation();
+
+        $utiliser->setIdEmp($user);
+        $utiliser->setNumeroEqp($eqp);
+        $utiliser->setDateUtilisation(new \DateTime());
+        $entityManager->persist($utiliser);
+        $entityManager->flush();
+    }
+
+    public function save_mantonance(Equipment $eqp, string $mnt, EntityManagerInterface $entityManager): void
+    {
+        $Reparation = new Reparation();
 
 
+        $Reparation->setNumeroEqp($eqp);
+        $Reparation->setDateEntre(new \DateTime());
+        $Reparation->setDescription($mnt);
+        $entityManager->persist($Reparation);
+        $entityManager->flush();
+    }
+    public function update_mantonance($numeroqp): void
+    {
+        $result = $this->maintenanceRepository->findMaxIdByNumereqp($numeroqp);
 
+        if ($result) {
+            $id = $result->getId();
+            $Reparation = $this->entityManager->getRepository(Reparation::class)->find($id);
+            $Reparation->setDateSortie(new \DateTime());
+            $this->entityManager->flush();
+        }
+    }
+    public function update_utilisation($numeroqp): void
+    {
+        $result = $this->UtilisationRepository->findMaxIdByNumereqp($numeroqp);
 
-
-
-
-
-
-
-
-    
+        if ($result) {
+            $id = $result->getId();
+            $Reparation = $this->entityManager->getRepository(Utilisation::class)->find($id);
+            $Reparation->setDateRetourne(new \DateTime());
+            $this->entityManager->flush();
+        }
+    }
 }

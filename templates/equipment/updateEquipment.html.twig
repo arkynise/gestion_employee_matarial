@@ -57,13 +57,13 @@
 			{% if eqp.state=='mantonance'%}
 				
 					<label class="form-label" for="typePasswordX-2">description de mantonance</label>
-					<textarea name="description" id="" name="mnt_desc" class="form-control form-control-lg"></textarea>
+					<textarea id="" name="mnt_desc" class="form-control form-control-lg"></textarea>
 
 				
 			{% elseif eqp.state=='utiliser' %}
 				
 					<label class="form-label" for="typePasswordX-2">state</label>
-					<select name="state" id="user" class="form-control form-control-lg">
+					<select name="user" id="user" class="form-control form-control-lg">
 						{% for Emp in Emps %}
 							<option value="{{Emp.id}}">{{Emp.name}}
 								{{Emp.lastname}}</option>
@@ -89,7 +89,7 @@
 		</div>
 		<div id="employeesList">
 			<label class="form-label" for="typePasswordX-2">state</label>
-			<select name="state" id="user" class="form-control form-control-lg">
+			<select name="user" id="user" class="form-control form-control-lg">
 				{% for Emp in Emps %}
 					<option value="{{Emp.id}}">{{Emp.name}}
 						{{Emp.lastname}}</option>

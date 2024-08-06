@@ -19,7 +19,7 @@ class Notefecation
     #[ORM\Column(length: 255)]
     private ?string $in_table = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_notefecation = null;
 
     #[ORM\Column]
